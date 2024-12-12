@@ -1,5 +1,13 @@
 add_library(core STATIC
         src/migration/MigrationSQL.cpp
+        include/entity/Drivers.h
+        include/entity/Vehicles.h
+        include/entity/Cargoes.h
+        include/entity/Routes.h
+        include/dao/DriverDAO.h
+        src/dao/DriverDAO.cpp
+        include/dao/CargoesDAO.h
+        src/dao/CargoesDAO.cpp
 )
 
 include_directories(/opt/homebrew/opt/libpq/include)
@@ -21,6 +29,10 @@ target_include_directories(core PUBLIC
         ${CMAKE_SOURCE_DIR}/libraries/poco/Net/include
         ${CMAKE_SOURCE_DIR}/libraries/poco/JSON/include
         ${CMAKE_SOURCE_DIR}/libraries/poco/Foundation/include
+        ${CMAKE_SOURCE_DIR}/libraries/uuid/include
+        ${CMAKE_SOURCE_DIR}/libraries/config/include
+        ${CMAKE_SOURCE_DIR}/libraries/type_traits/include
+        ${CMAKE_SOURCE_DIR}/libraries/assert/include
 )
 
 target_precompile_headers(core PUBLIC ${CMAKE_SOURCE_DIR}/pch/pch.h)
