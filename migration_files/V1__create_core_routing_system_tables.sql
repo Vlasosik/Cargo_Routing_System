@@ -13,45 +13,45 @@ do $$
     end $$;
 create table if not exists drivers
 (
-    id         uuid primary key,
+    id         bigserial primary key,
     first_name varchar(50)                                    not null,
     last_name  varchar(50)                                    not null,
     phone      varchar(15) check (phone ~ '^\+?[0-9]{7,15}$') not null unique,
-    created_at timestamp default current_timestamp,
-    updated_at timestamp default current_timestamp
+    created_at timestamp default current_timestamp not null,
+    updated_at timestamp default current_timestamp not null
 );
 
 create table if not exists vehicles
 (
-    id         uuid primary key,
+    id         bigserial primary key,
     brand      varchar(50)  not null,
     type       type_vehicle not null,
-    created_at timestamp default current_timestamp,
-    updated_at timestamp default current_timestamp
+    created_at timestamp default current_timestamp not null,
+    updated_at timestamp default current_timestamp not null
 );
 
 create table if not exists cargoes
 (
-    id         uuid primary key,
+    id         bigserial primary key,
     name       varchar(50)                         not null,
     weight     double precision check (weight > 0) not null,
     sender     varchar(100)                        not null,
     receipt    varchar(100)                        not null,
-    created_at timestamp default current_timestamp,
-    updated_at timestamp default current_timestamp
+    created_at timestamp default current_timestamp not null,
+    updated_at timestamp default current_timestamp not null
 );
 
 create table if not exists routes
 (
-    id          uuid primary key,
-    driver_id   uuid         not null references drivers (id) on delete set null on update cascade,
-    vehicles_id uuid         not null references vehicles (id) on delete set null on update cascade,
-    cargoes_id  uuid         not null references cargoes (id) on delete set null on update cascade,
+    id          bigserial primary key,
+    driver_id   bigserial         not null references drivers (id) on delete set null on update cascade,
+    vehicles_id bigserial         not null references vehicles (id) on delete set null on update cascade,
+    cargoes_id  bigserial         not null references cargoes (id) on delete set null on update cascade,
     start_point varchar(150) not null,
     end_point   varchar(150) not null,
     status status_type not null,
-    created_at  timestamp default current_timestamp,
-    updated_at  timestamp default current_timestamp
+    created_at timestamp default current_timestamp not null,
+    updated_at timestamp default current_timestamp not null
 );
 
 do $$
