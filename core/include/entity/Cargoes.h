@@ -138,22 +138,38 @@ namespace mydb::Cargoes {
     };
 }
 
-struct TabCargoes {
+struct Cargoes {
     int64_t id = 0;
     std::string name;
     double weight = 0.0;
     std::string sender;
     std::string receipt;
-    sqlpp::time_point createdAt;
-    sqlpp::time_point updatedAt;
+    sqlpp::chrono::microsecond_point createdAt;
+    sqlpp::chrono::microsecond_point updatedAt;
 
-    TabCargoes() = default;
+    Cargoes() = default;
 
-    explicit TabCargoes(int64_t id, std::string name, double weight, std::string sender, std::string receipt,
-                        sqlpp::time_point createdAt,
-                        sqlpp::time_point updatedAt)
+    explicit Cargoes(int64_t id, std::string name, double weight, std::string sender, std::string receipt,
+                     sqlpp::chrono::microsecond_point createdAt,
+                     sqlpp::chrono::microsecond_point updatedAt)
         : id(id), name(std::move(name)), weight(weight), sender(std::move(sender)), receipt(std::move(receipt)),
           createdAt(createdAt), updatedAt(updatedAt) {
     }
+
+    [[nodiscard]] int64_t getId() const { return id; }
+    [[nodiscard]] std::string getName() const { return name; }
+    [[nodiscard]] double getWeight() const { return weight; }
+    [[nodiscard]] std::string getSender() const { return sender; }
+    [[nodiscard]] std::string getReceipt() const { return receipt; }
+    [[nodiscard]] sqlpp::chrono::microsecond_point getCreatedAt() const { return createdAt; }
+    [[nodiscard]] sqlpp::chrono::microsecond_point getUpdatedAt() const { return updatedAt; }
+
+    void setId(const int64_t id) { this->id = id; }
+    void setName(std::string name) { this->name = std::move(name); }
+    void setWeight(const double weight) { this->weight = weight; }
+    void setSender(std::string sender) { this->sender = std::move(sender); }
+    void setReceipt(std::string receipt) { this->receipt = std::move(receipt); }
+    void setCreatedAt(const sqlpp::chrono::microsecond_point createdAt) { this->createdAt = createdAt; }
+    void setUpdatedAt(const sqlpp::chrono::microsecond_point updatedAt) { this->updatedAt = updatedAt; }
 };
 #endif //CARGOES_H

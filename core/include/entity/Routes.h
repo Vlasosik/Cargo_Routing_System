@@ -171,25 +171,45 @@ namespace mydb::Routes {
     };
 }
 
-struct TabRoutes {
-    int64_t id;
-    int64_t driverId;
-    int64_t vehicleId;
-    int64_t cargoesId;
+struct Routes {
+    int64_t id = 0;
+    int64_t driverId = 0;
+    int64_t vehicleId = 0;
+    int64_t cargoesId = 0;
     std::string startPoint;
     std::string endPoint;
     std::string status;
-    sqlpp::time_point createdAt;
-    sqlpp::time_point updatedAt;
+    sqlpp::chrono::microsecond_point createdAt;
+    sqlpp::chrono::microsecond_point updatedAt;
 
-    TabRoutes() = default;
+    Routes() = default;
 
-    explicit TabRoutes(const int64_t id, const int64_t driverId, const int64_t vehicleId, const int64_t cargoesId,
-                       std::string startPoint,
-                       std::string endPoint, std::string status, const sqlpp::time_point createdAt,
-                       const sqlpp::time_point updatedAt)
+    explicit Routes(const int64_t id, const int64_t driverId, const int64_t vehicleId, const int64_t cargoesId,
+                    std::string startPoint,
+                    std::string endPoint, std::string status, const sqlpp::chrono::microsecond_point createdAt,
+                    const sqlpp::chrono::microsecond_point updatedAt)
         : id(id), driverId(driverId), vehicleId(vehicleId), cargoesId(cargoesId), startPoint(std::move(startPoint)),
           endPoint(std::move(endPoint)), status(std::move(status)), createdAt(createdAt), updatedAt(updatedAt) {
     }
+
+    [[nodiscard]] int64_t getId() const { return id; }
+    [[nodiscard]] int64_t getDriverId() const { return driverId; }
+    [[nodiscard]] int64_t getVehicleId() const { return vehicleId; }
+    [[nodiscard]] int64_t getCargoesId() const { return cargoesId; }
+    [[nodiscard]] std::string getStartPoint() const { return startPoint; }
+    [[nodiscard]] std::string getEndPoint() const { return endPoint; }
+    [[nodiscard]] std::string getStatus() const { return status; }
+    [[nodiscard]] sqlpp::chrono::microsecond_point getCreatedAt() const { return createdAt; }
+    [[nodiscard]] sqlpp::chrono::microsecond_point getUpdatedAt() const { return updatedAt; }
+
+    void setId(const int64_t id) { this->id = id; }
+    void setDriverId(const int64_t driverId) { this->driverId = driverId; }
+    void setVehicleId(const int64_t vehicleId) { this->vehicleId = vehicleId; }
+    void setCargoesId(const int64_t cargoesId) { this->cargoesId = cargoesId; }
+    void setStartPoint(std::string startPoint) { this->startPoint = std::move(startPoint); }
+    void setEndPoint(std::string endPoint) { this->endPoint = std::move(endPoint); }
+    void setStatus(std::string status) { this->status = std::move(status); }
+    void setCreatedAt(const sqlpp::chrono::microsecond_point createdAt) { this->createdAt = createdAt; }
+    void setUpdatedAt(const sqlpp::chrono::microsecond_point updatedAt) { this->updatedAt = updatedAt; }
 };
 #endif //ROUTES_H

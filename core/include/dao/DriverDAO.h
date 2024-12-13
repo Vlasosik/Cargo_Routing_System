@@ -10,16 +10,18 @@ class DriverDAO {
 public:
     DriverDAO();
 
-    void createDriver(const TabDrivers& driver);
+    void createDriver(const Drivers& driver);
 
-    int64_t getDriverId(const int64_t &id);
+    int64_t getDriverById(const int64_t &id);
 
-    std::vector<TabDrivers> getAllDrivers();
+    std::vector<Drivers> getAllDrivers();
 
-    void updateDriver(const TabDrivers& driver);
+    void updateDriver(const Drivers& driver);
 
     void deleteDriver(const int64_t &id);
 
     bool isDriverExist(const int64_t &id);
+
+    bool isPhoneExist(const std::string &phone);
 };
 #endif //DRIVERDAO_H

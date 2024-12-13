@@ -40,7 +40,7 @@ namespace mydb::Vehicles {
             };
         };
 
-        using _traits = sqlpp::make_traits<sqlpp::varchar, sqlpp::tag::must_not_insert>;
+        using _traits = sqlpp::make_traits<sqlpp::varchar>;
     };
 
     struct Type {
@@ -56,7 +56,7 @@ namespace mydb::Vehicles {
             };
         };
 
-        using _traits = sqlpp::make_traits<sqlpp::varchar, sqlpp::tag::must_not_insert>;
+        using _traits = sqlpp::make_traits<sqlpp::varchar>;
     };
 
     struct CreatedAt {
@@ -93,7 +93,7 @@ namespace mydb::Vehicles {
 
     struct TabVehicle : sqlpp::table_t<TabVehicle, Id, Brand, Type, CreatedAt, UpdatedAt> {
         struct _alias_t {
-            static constexpr char _literal[] = "vehicle";
+            static constexpr char _literal[] = "vehicles";
             using _name_t = sqlpp::make_char_sequence<sizeof(_literal), _literal>;
 
             template<typename T>
@@ -106,17 +106,31 @@ namespace mydb::Vehicles {
     };
 }
 
-struct TabVehicles {
+struct Vehicles {
     int64_t id = 0;
     std::string brand;
-    sqlpp::time_point createdAt;
-    sqlpp::time_point updatedAt;
+    std::string type;
+    sqlpp::chrono::microsecond_point createdAt;
+    sqlpp::chrono::microsecond_point updatedAt;
 
-    TabVehicles() = default;
+    Vehicles() = default;
 
-    explicit TabVehicles(const int64_t id, std::string brand, const sqlpp::time_point createdAt,
-                         const sqlpp::time_point updatedAt)
-        : id(id), brand(std::move(brand)), createdAt(createdAt), updatedAt(updatedAt) {
+    explicit Vehicles(const int64_t id, std::string brand, std::string type,
+                      const sqlpp::chrono::microsecond_point createdAt,
+                      const sqlpp::chrono::microsecond_point updatedAt)
+        : id(id), brand(std::move(brand)), type(std::move(type)), createdAt(createdAt), updatedAt(updatedAt) {
     }
+
+    [[nodiscard]] int64_t getId() const { return id; }
+    [[nodiscard]] std::string getBrand() const { return brand; }
+    [[nodiscard]] std::string getType() const { return type; }
+    [[nodiscard]] sqlpp::chrono::microsecond_point getCreatedAt() const { return createdAt; }
+    [[nodiscard]] sqlpp::chrono::microsecond_point getUpdatedAt() const { return updatedAt; }
+
+    void setId(const int64_t id) { this->id = id; }
+    void setBrand(std::string brand) { this->brand = std::move(brand); }
+    void setType(std::string type) { this->type = std::move(type); }
+    void setCreatedAt(const sqlpp::chrono::microsecond_point createdAt) { this->createdAt = createdAt; }
+    void setUpdatedAt(const sqlpp::chrono::microsecond_point updatedAt) { this->updatedAt = updatedAt; }
 };
 #endif //VEHICLES_H

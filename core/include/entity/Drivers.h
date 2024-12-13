@@ -5,6 +5,7 @@
 #include <sqlpp11/type_traits.h>
 #include <boost/uuid/uuid.hpp>
 #include <sqlpp11/data_types/time_point.h>
+#include <sqlpp11/data_types/integral/data_type.h>
 #include <sqlpp11/data_types/text/data_type.h>
 
 namespace mydb::Drivers {
@@ -119,7 +120,7 @@ namespace mydb::Drivers {
     };
 }
 
-struct TabDrivers {
+struct Drivers {
     int64_t id = 0;
     std::string firstName;
     std::string lastName;
@@ -127,13 +128,27 @@ struct TabDrivers {
     sqlpp::chrono::microsecond_point createdAt;
     sqlpp::chrono::microsecond_point updatedAt;
 
-    TabDrivers() = default;
+    Drivers() = default;
 
-    explicit TabDrivers(int64_t id, std::string firstName, std::string lastName, std::string phone,
-                        sqlpp::chrono::microsecond_point createdAt,
-                        sqlpp::chrono::microsecond_point updatedAt)
+    explicit Drivers(int64_t id, std::string firstName, std::string lastName, std::string phone,
+                     sqlpp::chrono::microsecond_point createdAt,
+                     sqlpp::chrono::microsecond_point updatedAt)
         : id(id), firstName(std::move(firstName)), lastName(std::move(lastName)), phone(std::move(phone)),
           createdAt(createdAt), updatedAt(updatedAt) {
     }
+
+    [[nodiscard]] int64_t getId() const { return id; }
+    [[nodiscard]] std::string getFirstName() const { return firstName; }
+    [[nodiscard]] std::string getLastName() const { return lastName; }
+    [[nodiscard]] std::string getPhone() const { return phone; }
+    [[nodiscard]] sqlpp::chrono::microsecond_point getCreatedAt() const { return createdAt; }
+    [[nodiscard]] sqlpp::chrono::microsecond_point getUpdatedAt() const { return updatedAt; }
+
+    void setId(const int64_t id) { this->id = id; }
+    void setFirstName(std::string firstName) { this->firstName = std::move(firstName); }
+    void setLastName(std::string lastName) { this->lastName = std::move(lastName); }
+    void setPhone(std::string phone) { this->phone = std::move(phone); }
+    void setCreatedAt(const sqlpp::chrono::microsecond_point createdAt) { this->createdAt = createdAt; }
+    void setUpdatedAt(const sqlpp::chrono::microsecond_point updatedAt) { this->updatedAt = updatedAt; }
 };
 #endif //DRIVERS_H

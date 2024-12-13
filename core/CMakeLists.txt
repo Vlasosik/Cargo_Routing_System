@@ -8,6 +8,18 @@ add_library(core STATIC
         src/dao/DriverDAO.cpp
         include/dao/CargoesDAO.h
         src/dao/CargoesDAO.cpp
+        include/dao/RoutesDAO.h
+        src/dao/RoutesDAO.cpp
+        include/dao/VehiclesDAO.h
+        src/dao/VehiclesDAO.cpp
+        include/service/CargoService.h
+        src/service/CargoService.cpp
+        include/service/DriverService.h
+        src/service/DriverService.cpp
+        include/service/RouteService.h
+        src/service/RouteService.cpp
+        include/service/VehicleService.h
+        src/service/VehicleService.cpp
 )
 
 include_directories(/opt/homebrew/opt/libpq/include)

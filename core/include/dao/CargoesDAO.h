@@ -10,13 +10,13 @@ class CargoesDAO {
 public:
     CargoesDAO();
 
-    void createCargoes(const TabCargoes &cargoes);
+    void createCargoes(const Cargoes &cargoes);
 
-    int64_t getCargoesId(int64_t id);
+    int64_t getCargoesById(int64_t id);
 
-    std::vector<TabCargoes> getAllCargoes();
+    std::vector<Cargoes> getAllCargoes();
 
-    void updateCargoes(const TabCargoes &cargoes);
+    void updateCargoes(const Cargoes &cargoes);
 
     void deleteCargoes(int64_t id);
 
