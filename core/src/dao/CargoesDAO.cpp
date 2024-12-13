@@ -1,6 +1,8 @@
 #include <dao/CargoesDAO.h>
 #include <sqlpp11/insert.h>
+#include <sqlpp11/remove.h>
 #include <sqlpp11/select.h>
+#include <sqlpp11/update.h>
 #include <sqlpp11/postgresql/insert.h>
 
 CargoesDAO::CargoesDAO() {
@@ -21,7 +23,7 @@ CargoesDAO::CargoesDAO() {
     db = sqlpp::postgresql::connection(config);
 }
 
-void CargoesDAO::createCargoes(const TabCargoes &cargoes) {
+void CargoesDAO::createCargoes(const Cargoes &cargoes) {
     auto cargo = mydb::Cargoes::TabCargoes{};
     auto statement = insert_into(cargo).set(
         cargo.name = cargoes.name,
@@ -37,9 +39,9 @@ void CargoesDAO::createCargoes(const TabCargoes &cargoes) {
     }
 }
 
-int64_t CargoesDAO::getCargoesId(int64_t id) {
+int64_t CargoesDAO::getCargoesById(const int64_t id) {
     if (!isCargoExist(id)) {
-        std::cout << "Cargo doesn`t exist!" << std::endl;
+        throw std::invalid_argument("Cargo doesn`t exist!");
     }
     auto cargo = mydb::Cargoes::TabCargoes{};
     auto statement = select(cargo.id).from(cargo).where(cargo.id == id);
@@ -47,7 +49,64 @@ int64_t CargoesDAO::getCargoesId(int64_t id) {
     return result.front().id;
 }
 
-bool CargoesDAO::isCargoExist(int64_t id) {
+std::vector<Cargoes> CargoesDAO::getAllCargoes() {
+    auto cargo = mydb::Cargoes::TabCargoes{};
+    auto statement = select(
+                cargo.id, cargo.name, cargo.weight, cargo.sender, cargo.receipt, cargo.createdAt, cargo.updated_at
+            ).from(cargo)
+            .where(cargo.id == 1);
+
+    auto result = db(statement);
+    if (result.empty()) {
+        throw std::invalid_argument("Cargoes don`t exist!");
+    }
+    std::vector<Cargoes> listCargoes;
+    for (const auto &row: result) {
+        auto createdAt = static_cast<std::chrono::system_clock::time_point>(row.createdAt);
+        auto updatedAt = static_cast<std::chrono::system_clock::time_point>(row.updated_at);
+        listCargoes.emplace_back(
+            row.id, row.name, row.weight, row.sender, row.receipt, createdAt, updatedAt
+        );
+    }
+    return listCargoes;
+}
+
+void CargoesDAO::updateCargoes(const Cargoes &cargoes) {
+    if (!isCargoExist(cargoes.id)) {
+        throw std::invalid_argument("Cargo doesn`t exist!");
+    }
+    auto cargo = mydb::Cargoes::TabCargoes{};
+    auto statement = update(cargo).set(
+        cargo.name = cargoes.name,
+        cargo.weight = cargoes.weight,
+        cargo.sender = cargoes.sender,
+        cargo.receipt = cargoes.receipt,
+        cargo.createdAt = cargoes.createdAt,
+        cargo.updated_at = cargoes.updatedAt
+    ).where(cargo.id == cargoes.id);
+    try {
+        db(statement);
+        std::cout << "Cargo successfully updated!" << std::endl;
+    } catch (const std::exception &e) {
+        std::cerr << "Error when executing a request: " << e.what() << std::endl;
+    }
+}
+
+void CargoesDAO::deleteCargoes(const int64_t id) {
+    if (!isCargoExist(id)) {
+        throw std::invalid_argument("Cargo doesn`t exist!");
+    }
+    auto cargo = mydb::Cargoes::TabCargoes{};
+    auto statement = remove_from(cargo).where(cargo.id == id);
+    try {
+        db(statement);
+        std::cout << "Cargo successfully deleted!" << std::endl;
+    } catch (const std::exception &e) {
+        std::cerr << "Error when executing a request: " << e.what() << std::endl;
+    }
+}
+
+bool CargoesDAO::isCargoExist(const int64_t id) {
     auto cargo = mydb::Cargoes::TabCargoes{};
     auto statement = select(cargo.id).from(cargo).where(cargo.id == id);
     auto result = db(statement);
