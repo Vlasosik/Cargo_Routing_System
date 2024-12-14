@@ -12,14 +12,14 @@ add_library(core STATIC
         src/dao/RoutesDAO.cpp
         include/dao/VehiclesDAO.h
         src/dao/VehiclesDAO.cpp
-        include/service/CargoService.h
-        src/service/CargoService.cpp
-        include/service/DriverService.h
-        src/service/DriverService.cpp
-        include/service/RouteService.h
-        src/service/RouteService.cpp
-        include/service/VehicleService.h
-        src/service/VehicleService.cpp
+        include/service/CargoesService.h
+        src/service/CargoesService.cpp
+        include/service/DriversService.h
+        src/service/DriversService.cpp
+        include/service/RoutesService.h
+        src/service/RoutesService.cpp
+        include/service/VehiclesService.h
+        src/service/VehiclesService.cpp
 )
 
 include_directories(/opt/homebrew/opt/libpq/include)
@@ -31,9 +31,6 @@ find_library(PQ_LIB pq HINTS /opt/homebrew/opt/libpq/lib REQUIRED)
 target_include_directories(core PUBLIC
         ${CMAKE_SOURCE_DIR}/core/include
         ${CMAKE_SOURCE_DIR}/pch
-)
-
-target_include_directories(core PUBLIC
         ${CMAKE_SOURCE_DIR}/libraries/asio/include
         ${CMAKE_SOURCE_DIR}/libraries/date/include
         ${CMAKE_SOURCE_DIR}/libraries/sqlpp11/include
