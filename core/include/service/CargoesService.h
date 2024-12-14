@@ -2,11 +2,11 @@
 #define CARGOSERVICE_H
 #include "dao/CargoesDAO.h"
 
-class CargoService {
+class CargoesService {
     CargoesDAO &cargoesDao;
 
 public:
-    explicit CargoService(CargoesDAO &cargoesDao);
+    explicit CargoesService(CargoesDAO &cargoesDao);
 
     void createCargo(const Cargoes &cargoes) const;
 

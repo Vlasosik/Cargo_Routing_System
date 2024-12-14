@@ -2,11 +2,11 @@
  #define ROUTESERVICE_H
  #include "dao/RoutesDAO.h"
 
- class RouteService {
+ class RoutesService {
      RoutesDAO &routesDao;
 
  public:
-     explicit RouteService(RoutesDAO &routesDao);
+     explicit RoutesService(RoutesDAO &routesDao);
 
      void createRoute(const Routes &routes) const;
 
