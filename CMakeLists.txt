@@ -4,6 +4,7 @@ project(intelligent_cargo_routing_system)
 set(CMAKE_CXX_STANDARD 17)
 
 add_subdirectory(core)
+add_subdirectory(networking)
 add_subdirectory(pch)
 
 include_directories(/opt/homebrew/opt/libpq/include)
@@ -18,4 +19,4 @@ target_precompile_headers(intelligent_cargo_routing_system PUBLIC
         ${CMAKE_SOURCE_DIR}/pch/pch.h
 )
 
-target_link_libraries(intelligent_cargo_routing_system PRIVATE core pch ${PQ_LIB})
+target_link_libraries(intelligent_cargo_routing_system PRIVATE core pch ${PQ_LIB} networking)

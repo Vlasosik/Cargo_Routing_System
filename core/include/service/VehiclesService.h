@@ -2,10 +2,10 @@
  #define VEHICLESERVICE_H
  #include "dao/VehiclesDAO.h"
 
- class VehicleService {
+ class VehiclesService {
      VehiclesDAO &vehiclesDao;
  public:
-     explicit VehicleService(VehiclesDAO &vehiclesDao);
+     explicit VehiclesService(VehiclesDAO &vehiclesDao);
 
      void createVehicle(const Vehicles &vehicles) const;
 

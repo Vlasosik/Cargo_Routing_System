@@ -2,11 +2,11 @@
  #define DRIVERSERVICE_H
  #include "dao/DriverDAO.h"
 
- class DriverService {
+ class DriversService {
      DriverDAO &driverDao;
 
  public:
-     explicit DriverService(DriverDAO &driverDao);
+     explicit DriversService(DriverDAO &driverDao);
 
      void createDriver(const Drivers &drivers) const;
 
