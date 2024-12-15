@@ -137,8 +137,8 @@ namespace mydb::Cargoes {
         };
     };
 }
-
 struct Cargoes {
+private:
     int64_t id = 0;
     std::string name;
     double weight = 0.0;
@@ -146,8 +146,9 @@ struct Cargoes {
     std::string receipt;
     sqlpp::chrono::microsecond_point createdAt;
     sqlpp::chrono::microsecond_point updatedAt;
-
-    Cargoes() = default;
+public:
+    Cargoes()
+        : createdAt(std::chrono::system_clock::now()), updatedAt(std::chrono::system_clock::now()) {}
 
     explicit Cargoes(int64_t id, std::string name, double weight, std::string sender, std::string receipt,
                      sqlpp::chrono::microsecond_point createdAt,
@@ -171,5 +172,13 @@ struct Cargoes {
     void setReceipt(std::string receipt) { this->receipt = std::move(receipt); }
     void setCreatedAt(const sqlpp::chrono::microsecond_point createdAt) { this->createdAt = createdAt; }
     void setUpdatedAt(const sqlpp::chrono::microsecond_point updatedAt) { this->updatedAt = updatedAt; }
+
+    static std::string formatTimeToString(const sqlpp::chrono::microsecond_point& timePoint) {
+        using namespace std::chrono;
+        auto time = system_clock::to_time_t(timePoint);
+        std::ostringstream oss;
+        oss << std::put_time(std::localtime(&time), "%Y-%m-%d %H:%M:%S");
+        return oss.str();
+    }
 };
 #endif //CARGOES_H
