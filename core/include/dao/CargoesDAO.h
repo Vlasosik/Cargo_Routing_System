@@ -12,7 +12,7 @@ public:
 
     void createCargoes(const Cargoes &cargoes);
 
-    int64_t getCargoesById(int64_t id);
+    Cargoes getCargoesById(int64_t id);
 
     std::vector<Cargoes> getAllCargoes();
 

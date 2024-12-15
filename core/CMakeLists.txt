@@ -20,6 +20,8 @@ add_library(core STATIC
         src/service/RoutesService.cpp
         include/service/VehiclesService.h
         src/service/VehiclesService.cpp
+        include/service/ServiceContainer.h
+        src/service/ServiceContainer.cpp
 )
 
 include_directories(/opt/homebrew/opt/libpq/include)

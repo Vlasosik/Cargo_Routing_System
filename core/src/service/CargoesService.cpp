@@ -10,12 +10,12 @@
      cargoesDao.createCargoes(cargoes);
  }
 
- int64_t CargoesService::getCargoById(const int64_t id) const {
-     return cargoesDao.getCargoesById(id);
- }
-
  std::vector<Cargoes> CargoesService::getAllCargoes() const {
      return cargoesDao.getAllCargoes();
+ }
+
+ Cargoes CargoesService::getCargoById(const int64_t id) const {
+     return cargoesDao.getCargoesById(id);
  }
 
  void CargoesService::updateCargo(const Cargoes &cargoes) const {
