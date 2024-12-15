@@ -8,8 +8,8 @@
 
 #include "factory/RequestHandlerFactory.h"
 
-HttpServer::HttpServer(int port) {
-    auto* params = new Poco::Net::HTTPServerParams();
+HttpServer::HttpServer(const int port) {
+    auto *params = new Poco::Net::HTTPServerParams();
     params->setMaxQueued(100);
     params->setMaxThreads(16);
     Poco::Net::ServerSocket socket(port);
