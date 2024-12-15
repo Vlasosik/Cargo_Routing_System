@@ -10,7 +10,7 @@ public:
 
     void createCargo(const Cargoes &cargoes) const;
 
-    [[nodiscard]] int64_t getCargoById(int64_t id) const;
+    [[nodiscard]] Cargoes getCargoById(int64_t id) const;
 
     [[nodiscard]] std::vector<Cargoes> getAllCargoes() const;
 
