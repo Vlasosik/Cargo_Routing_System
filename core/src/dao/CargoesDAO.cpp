@@ -26,10 +26,10 @@ CargoesDAO::CargoesDAO() {
 void CargoesDAO::createCargoes(const Cargoes &cargoes) {
     auto cargo = mydb::Cargoes::TabCargoes{};
     auto statement = insert_into(cargo).set(
-        cargo.name = cargoes.name,
-        cargo.weight = cargoes.weight,
-        cargo.sender = cargoes.sender,
-        cargo.receipt = cargoes.receipt
+        cargo.name = cargoes.getName(),
+        cargo.weight = cargoes.getWeight(),
+        cargo.sender = cargoes.getSender(),
+        cargo.receipt = cargoes.getReceipt()
     );
     try {
         db(statement);
@@ -39,14 +39,24 @@ void CargoesDAO::createCargoes(const Cargoes &cargoes) {
     }
 }
 
-int64_t CargoesDAO::getCargoesById(const int64_t id) {
+Cargoes CargoesDAO::getCargoesById(const int64_t id) {
     if (!isCargoExist(id)) {
         throw std::invalid_argument("Cargo doesn`t exist!");
     }
     auto cargo = mydb::Cargoes::TabCargoes{};
-    auto statement = select(cargo.id).from(cargo).where(cargo.id == id);
+    auto statement = select(cargo.id, cargo.name, cargo.weight, cargo.sender, cargo.receipt, cargo.createdAt,
+                            cargo.updated_at).from(cargo).where(cargo.id == id);
     auto result = db(statement);
-    return result.front().id;
+    const auto& row = result.front();
+    Cargoes cargoes;
+    cargoes.setId(row.id);
+    cargoes.setName(row.name);
+    cargoes.setWeight(row.weight);
+    cargoes.setSender(row.sender);
+    cargoes.setReceipt(row.receipt);
+    cargoes.setCreatedAt(row.createdAt);
+    cargoes.setUpdatedAt(row.updated_at);
+    return cargoes;
 }
 
 std::vector<Cargoes> CargoesDAO::getAllCargoes() {
@@ -72,18 +82,18 @@ std::vector<Cargoes> CargoesDAO::getAllCargoes() {
 }
 
 void CargoesDAO::updateCargoes(const Cargoes &cargoes) {
-    if (!isCargoExist(cargoes.id)) {
+    if (!isCargoExist(cargoes.getId())) {
         throw std::invalid_argument("Cargo doesn`t exist!");
     }
     auto cargo = mydb::Cargoes::TabCargoes{};
     auto statement = update(cargo).set(
-        cargo.name = cargoes.name,
-        cargo.weight = cargoes.weight,
-        cargo.sender = cargoes.sender,
-        cargo.receipt = cargoes.receipt,
-        cargo.createdAt = cargoes.createdAt,
-        cargo.updated_at = cargoes.updatedAt
-    ).where(cargo.id == cargoes.id);
+        cargo.name = cargoes.getName(),
+        cargo.weight = cargoes.getWeight(),
+        cargo.sender = cargoes.getSender(),
+        cargo.receipt = cargoes.getReceipt(),
+        cargo.createdAt = cargoes.getCreatedAt(),
+        cargo.updated_at = cargoes.getUpdatedAt()
+    ).where(cargo.id == cargoes.getId());
     try {
         db(statement);
         std::cout << "Cargo successfully updated!" << std::endl;
