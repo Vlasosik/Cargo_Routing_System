@@ -146,9 +146,9 @@ namespace mydb::Routes {
 
             template<typename T>
             struct _member_t {
-                T updated_at;
-                T &operator()() { return updated_at; }
-                const T &operator()() const { return updated_at; }
+                T updatedAt;
+                T &operator()() { return updatedAt; }
+                const T &operator()() const { return updatedAt; }
             };
         };
 
@@ -172,24 +172,46 @@ namespace mydb::Routes {
 }
 
 struct Routes {
-    int64_t id = 0;
-    int64_t driverId = 0;
-    int64_t vehicleId = 0;
-    int64_t cargoesId = 0;
+private:
+    int64_t id{};
+    int64_t driverId;
+    int64_t vehicleId;
+    int64_t cargoesId;
     std::string startPoint;
     std::string endPoint;
     std::string status;
     sqlpp::chrono::microsecond_point createdAt;
     sqlpp::chrono::microsecond_point updatedAt;
 
-    Routes() = default;
+public:
+    Routes()
+        : driverId(0), vehicleId(0), cargoesId(0), createdAt(std::chrono::system_clock::now()),
+          updatedAt(std::chrono::system_clock::now()) {
+    }
 
-    explicit Routes(const int64_t id, const int64_t driverId, const int64_t vehicleId, const int64_t cargoesId,
-                    std::string startPoint,
-                    std::string endPoint, std::string status, const sqlpp::chrono::microsecond_point createdAt,
-                    const sqlpp::chrono::microsecond_point updatedAt)
-        : id(id), driverId(driverId), vehicleId(vehicleId), cargoesId(cargoesId), startPoint(std::move(startPoint)),
-          endPoint(std::move(endPoint)), status(std::move(status)), createdAt(createdAt), updatedAt(updatedAt) {
+    Routes(int64_t id, int64_t driverId, int64_t vehicleId, int64_t cargoesId,
+           std::string startPoint, std::string endPoint, std::string status,
+           const sqlpp::chrono::microsecond_point &createdAt, const sqlpp::chrono::microsecond_point &updatedAt)
+        : id(id), driverId(driverId), vehicleId(vehicleId), cargoesId(cargoesId),
+          startPoint(std::move(startPoint)), endPoint(std::move(endPoint)),
+          status(std::move(status)), createdAt(createdAt),
+          updatedAt(updatedAt) {
+    }
+
+    Routes(int64_t id, int64_t driverId, int64_t vehicleId, int64_t cargoesId,
+           std::string startPoint, std::string endPoint, std::string status)
+        : id(id), driverId(driverId), vehicleId(vehicleId), cargoesId(cargoesId),
+          startPoint(std::move(startPoint)), endPoint(std::move(endPoint)),
+          status(std::move(status)), createdAt(std::chrono::system_clock::now()),
+          updatedAt(std::chrono::system_clock::now()) {
+    }
+
+    Routes(int64_t driverId, int64_t vehicleId, int64_t cargoesId,
+           std::string startPoint, std::string endPoint, std::string status)
+        : driverId(driverId), vehicleId(vehicleId), cargoesId(cargoesId),
+          startPoint(std::move(startPoint)), endPoint(std::move(endPoint)),
+          status(std::move(status)), createdAt(std::chrono::system_clock::now()),
+          updatedAt(std::chrono::system_clock::now()) {
     }
 
     [[nodiscard]] int64_t getId() const { return id; }
@@ -211,5 +233,13 @@ struct Routes {
     void setStatus(std::string status) { this->status = std::move(status); }
     void setCreatedAt(const sqlpp::chrono::microsecond_point createdAt) { this->createdAt = createdAt; }
     void setUpdatedAt(const sqlpp::chrono::microsecond_point updatedAt) { this->updatedAt = updatedAt; }
+
+    static std::string formatTimeToString(const sqlpp::chrono::microsecond_point &timePoint) {
+        using namespace std::chrono;
+        auto time = system_clock::to_time_t(timePoint);
+        std::ostringstream oss;
+        oss << std::put_time(std::localtime(&time), "%Y-%m-%d %H:%M:%S");
+        return oss.str();
+    }
 };
 #endif //ROUTES_H

@@ -7,6 +7,10 @@ add_library(networking STATIC
         src/factory/RequestHandlerCargoes.cpp
         src/response/JsonCargoesResponse.cpp
         include/response/JsonCargoesResponse.h
+        include/factory/RequestHandlerRoutes.h
+        src/factory/RequestHandlerRoutes.cpp
+        include/response/JsonRoutesResponse.h
+        src/response/JsonRoutesResponse.cpp
 )
 
 include_directories(/opt/homebrew/opt/libpq/include)

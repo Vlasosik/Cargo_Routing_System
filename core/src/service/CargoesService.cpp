@@ -4,8 +4,8 @@
  }
 
  void CargoesService::createCargo(const Cargoes &cargoes) const {
-     if (cargoes.getId() <= 0) {
-         throw std::invalid_argument("Id must be greater than zero.");
+     if (cargoes.getWeight() < 0) {
+         throw std::invalid_argument("Value must be greater than zero.");
      }
      cargoesDao.createCargoes(cargoes);
  }
