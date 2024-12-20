@@ -2,8 +2,18 @@
 #define REQUESTHANDLERFACTORY_H
 #include <Poco/Net/HTTPRequestHandlerFactory.h>
 
-class RequestHandlerFactory : public  Poco::Net::HTTPRequestHandlerFactory{
+#include "RequestHandlerCargoes.h"
+#include "RequestHandlerRoutes.h"
+
+class RequestHandlerFactory : public Poco::Net::HTTPRequestHandlerFactory {
+    std::unordered_map<std::string, std::function<Poco::Net::HTTPRequestHandler*()> > handler;
+
+    void registerHandler(const std::string &path, const std::function<Poco::Net::HTTPRequestHandler*()> &creator) {
+        handler[path] = creator;
+    }
 public:
-    Poco::Net::HTTPRequestHandler * createRequestHandler(const Poco::Net::HTTPServerRequest &request) override;
+    RequestHandlerFactory();
+
+    Poco::Net::HTTPRequestHandler *createRequestHandler(const Poco::Net::HTTPServerRequest &request) override;
 };
 #endif //REQUESTHANDLERFACTORY_H
