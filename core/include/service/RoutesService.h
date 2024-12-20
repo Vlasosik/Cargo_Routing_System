@@ -10,7 +10,7 @@
 
      void createRoute(const Routes &routes) const;
 
-     [[nodiscard]] int64_t getRouteById(int64_t id) const;
+     [[nodiscard]] Routes getRouteById(int64_t id) const;
 
      [[nodiscard]] std::vector<Routes> getAllRoutes() const;
 

@@ -4,13 +4,10 @@
   }
 
   void RoutesService::createRoute(const Routes &routes) const {
-      if (routes.id <= 0) {
-          throw std::invalid_argument("Id must be greater than zero.");
-      }
       routesDao.createRoutes(routes);
   }
 
-  int64_t RoutesService::getRouteById(const int64_t id) const {
+  Routes RoutesService::getRouteById(const int64_t id) const {
       return routesDao.getRoutesById(id);
   }
 
