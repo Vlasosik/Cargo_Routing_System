@@ -12,7 +12,7 @@ public:
 
     void createRoutes(const Routes &routes);
 
-    int64_t getRoutesById(const int64_t &id);
+    Routes getRoutesById(const int64_t &id);
 
     std::vector<Routes> getAllRoutes();
 
