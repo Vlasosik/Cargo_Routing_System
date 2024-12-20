@@ -7,8 +7,10 @@
 
 class RequestHandlerRoutes : public Poco::Net::HTTPRequestHandler {
     RoutesService &routesService;
+
 public:
     RequestHandlerRoutes();
+
     void handleRequest(Poco::Net::HTTPServerRequest &request, Poco::Net::HTTPServerResponse &response) override;
 
     void handleCreateRoute(Poco::Net::HTTPServerRequest &request, Poco::Net::HTTPServerResponse &response) const;

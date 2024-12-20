@@ -9,6 +9,7 @@
 
 class RequestHandlerCargoes : public Poco::Net::HTTPRequestHandler {
     CargoesService &cargoesService;
+
 public:
     RequestHandlerCargoes();
 
@@ -22,6 +23,6 @@ public:
     void handleUpdateCargo(Poco::Net::HTTPServerRequest &request, Poco::Net::HTTPServerResponse &response) const;
 
     void handleDeleteCargo(const Poco::URI::QueryParameters &queryParameters,
-                            Poco::Net::HTTPServerResponse &response) const;
+                           Poco::Net::HTTPServerResponse &response) const;
 };
 #endif //REQUESTHANDLERCARGOES_H

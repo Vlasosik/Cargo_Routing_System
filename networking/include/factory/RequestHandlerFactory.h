@@ -11,6 +11,7 @@ class RequestHandlerFactory : public Poco::Net::HTTPRequestHandlerFactory {
     void registerHandler(const std::string &path, const std::function<Poco::Net::HTTPRequestHandler*()> &creator) {
         handler[path] = creator;
     }
+
 public:
     RequestHandlerFactory();
 

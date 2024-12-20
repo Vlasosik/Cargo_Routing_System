@@ -13,10 +13,10 @@ RequestHandlerFactory::RequestHandlerFactory() {
     registerHandler("/cargo/delete", []() { return new RequestHandlerCargoes; });
 
     // Create route request handler
-    registerHandler("/route", [](){return new RequestHandlerRoutes; });
-    registerHandler("/route/create", [](){return new RequestHandlerRoutes; });
-    registerHandler("/route/update", [](){return new RequestHandlerRoutes; });
-    registerHandler("/route/delete", [](){return new RequestHandlerRoutes; });
+    registerHandler("/route", []() { return new RequestHandlerRoutes; });
+    registerHandler("/route/create", []() { return new RequestHandlerRoutes; });
+    registerHandler("/route/update", []() { return new RequestHandlerRoutes; });
+    registerHandler("/route/delete", []() { return new RequestHandlerRoutes; });
 }
 
 Poco::Net::HTTPRequestHandler *RequestHandlerFactory::
