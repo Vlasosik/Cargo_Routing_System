@@ -45,7 +45,7 @@ Cargoes CargoesDAO::getCargoesById(const int64_t id) {
     }
     auto cargo = mydb::Cargoes::TabCargoes{};
     auto statement = select(cargo.id, cargo.name, cargo.weight, cargo.sender, cargo.receipt, cargo.createdAt,
-                            cargo.updated_at).from(cargo).where(cargo.id == id);
+                            cargo.updatedAt).from(cargo).where(cargo.id == id);
     auto result = db(statement);
     const auto& row = result.front();
     Cargoes cargoes;
@@ -55,14 +55,14 @@ Cargoes CargoesDAO::getCargoesById(const int64_t id) {
     cargoes.setSender(row.sender);
     cargoes.setReceipt(row.receipt);
     cargoes.setCreatedAt(row.createdAt);
-    cargoes.setUpdatedAt(row.updated_at);
+    cargoes.setUpdatedAt(row.updatedAt);
     return cargoes;
 }
 
 std::vector<Cargoes> CargoesDAO::getAllCargoes() {
     auto cargo = mydb::Cargoes::TabCargoes{};
     auto statement = select(
-                cargo.id, cargo.name, cargo.weight, cargo.sender, cargo.receipt, cargo.createdAt, cargo.updated_at
+                cargo.id, cargo.name, cargo.weight, cargo.sender, cargo.receipt, cargo.createdAt, cargo.updatedAt
             ).from(cargo)
             .where(cargo.id == 1);
 
@@ -73,7 +73,7 @@ std::vector<Cargoes> CargoesDAO::getAllCargoes() {
     std::vector<Cargoes> listCargoes;
     for (const auto &row: result) {
         auto createdAt = static_cast<std::chrono::system_clock::time_point>(row.createdAt);
-        auto updatedAt = static_cast<std::chrono::system_clock::time_point>(row.updated_at);
+        auto updatedAt = static_cast<std::chrono::system_clock::time_point>(row.updatedAt);
         listCargoes.emplace_back(
             row.id, row.name, row.weight, row.sender, row.receipt, createdAt, updatedAt
         );
@@ -92,7 +92,7 @@ void CargoesDAO::updateCargoes(const Cargoes &cargoes) {
         cargo.sender = cargoes.getSender(),
         cargo.receipt = cargoes.getReceipt(),
         cargo.createdAt = cargoes.getCreatedAt(),
-        cargo.updated_at = cargoes.getUpdatedAt()
+        cargo.updatedAt = cargoes.getUpdatedAt()
     ).where(cargo.id == cargoes.getId());
     try {
         db(statement);
