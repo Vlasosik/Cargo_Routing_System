@@ -1,6 +1,7 @@
 #ifndef CARGOES_H
 #define CARGOES_H
 #include <string>
+#include <utility>
 #include <sqlpp11/char_sequence.h>
 #include <sqlpp11/type_traits.h>
 #include <sqlpp11/chrono.h>
@@ -114,9 +115,9 @@ namespace mydb::Cargoes {
 
             template<typename T>
             struct _member_t {
-                T updated_at;
-                T &operator()() { return updated_at; }
-                const T &operator()() const { return updated_at; }
+                T updatedAt;
+                T &operator()() { return updatedAt; }
+                const T &operator()() const { return updatedAt; }
             };
         };
 
@@ -137,24 +138,37 @@ namespace mydb::Cargoes {
         };
     };
 }
+
 struct Cargoes {
 private:
-    int64_t id = 0;
+    int64_t id {};
     std::string name;
-    double weight = 0.0;
+    double weight;
     std::string sender;
     std::string receipt;
     sqlpp::chrono::microsecond_point createdAt;
     sqlpp::chrono::microsecond_point updatedAt;
+
 public:
     Cargoes()
-        : createdAt(std::chrono::system_clock::now()), updatedAt(std::chrono::system_clock::now()) {}
+        : weight(0.0),createdAt(std::chrono::system_clock::now()), updatedAt(std::chrono::system_clock::now()) {
+    }
 
-    explicit Cargoes(int64_t id, std::string name, double weight, std::string sender, std::string receipt,
-                     sqlpp::chrono::microsecond_point createdAt,
-                     sqlpp::chrono::microsecond_point updatedAt)
+    Cargoes(int64_t id, std::string name, double weight, std::string sender, std::string receipt,
+            sqlpp::chrono::microsecond_point createdAt,
+            sqlpp::chrono::microsecond_point updatedAt)
         : id(id), name(std::move(name)), weight(weight), sender(std::move(sender)), receipt(std::move(receipt)),
           createdAt(createdAt), updatedAt(updatedAt) {
+    }
+
+    Cargoes(int64_t id, std::string name, double weight, std::string sender, std::string receipt)
+        : id(id), name(std::move(name)), weight(weight), sender(std::move(sender)), receipt(std::move(receipt)),
+          createdAt(std::chrono::system_clock::now()), updatedAt(std::chrono::system_clock::now()) {
+    }
+
+    Cargoes(std::string name, double weight, std::string sender, std::string receipt)
+        : name(std::move(name)), weight(weight), sender(std::move(sender)), receipt(std::move(receipt)),
+          createdAt(std::chrono::system_clock::now()), updatedAt(std::chrono::system_clock::now()) {
     }
 
     [[nodiscard]] int64_t getId() const { return id; }
@@ -173,7 +187,7 @@ public:
     void setCreatedAt(const sqlpp::chrono::microsecond_point createdAt) { this->createdAt = createdAt; }
     void setUpdatedAt(const sqlpp::chrono::microsecond_point updatedAt) { this->updatedAt = updatedAt; }
 
-    static std::string formatTimeToString(const sqlpp::chrono::microsecond_point& timePoint) {
+    static std::string formatTimeToString(const sqlpp::chrono::microsecond_point &timePoint) {
         using namespace std::chrono;
         auto time = system_clock::to_time_t(timePoint);
         std::ostringstream oss;
