@@ -9,13 +9,19 @@
 
 class RequestHandlerCargoes : public Poco::Net::HTTPRequestHandler {
     CargoesService &cargoesService;
-
 public:
     RequestHandlerCargoes();
 
     void handleRequest(Poco::Net::HTTPServerRequest &request, Poco::Net::HTTPServerResponse &response) override;
 
-    void handleGetCargoById(const Poco::URI::QueryParameters &queryParameters, Poco::Net::HTTPServerResponse &response) const;
-    void handlePostCargo(Poco::Net::HTTPServerRequest &request,Poco::Net::HTTPServerResponse &response);
+    void handleCreateCargo(Poco::Net::HTTPServerRequest &request, Poco::Net::HTTPServerResponse &response) const;
+
+    void handleGetCargoById(const Poco::URI::QueryParameters &queryParameters,
+                            Poco::Net::HTTPServerResponse &response) const;
+
+    void handleUpdateCargo(Poco::Net::HTTPServerRequest &request, Poco::Net::HTTPServerResponse &response) const;
+
+    void handleDeleteCargo(const Poco::URI::QueryParameters &queryParameters,
+                            Poco::Net::HTTPServerResponse &response) const;
 };
 #endif //REQUESTHANDLERCARGOES_H
