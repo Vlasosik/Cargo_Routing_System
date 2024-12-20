@@ -23,12 +23,12 @@ RoutesDAO::RoutesDAO() {
 void RoutesDAO::createRoutes(const Routes &routes) {
     auto route = mydb::Routes::TabRoutes{};
     auto statement = insert_into(route).set(
-        route.driverId = routes.driverId,
-        route.vehiclesId = routes.vehicleId,
-        route.cargoesId = routes.cargoesId,
-        route.startPoint = routes.startPoint,
-        route.endPoint = routes.endPoint,
-        route.status = routes.status
+        route.driverId = routes.getDriverId(),
+        route.vehiclesId = routes.getVehicleId(),
+        route.cargoesId = routes.getCargoesId(),
+        route.startPoint = routes.getStartPoint(),
+        route.endPoint = routes.getEndPoint(),
+        route.status = routes.getStatus()
     );
     try {
         db(statement);
@@ -38,21 +38,35 @@ void RoutesDAO::createRoutes(const Routes &routes) {
     }
 }
 
-int64_t RoutesDAO::getRoutesById(const int64_t &id) {
+Routes RoutesDAO::getRoutesById(const int64_t &id) {
     if (!isRoutesExist(id)) {
         throw std::invalid_argument("Route doesn`t exist!");
     }
     auto route = mydb::Routes::TabRoutes{};
-    auto statement = select(route.id).from(route).where(route.id == id);
+    auto statement = select(route.id, route.driverId, route.vehiclesId,
+                            route.cargoesId, route.startPoint, route.endPoint, route.status, route.createdAt,
+                            route.updatedAt).from(route)
+            .where(route.id == id);
     auto result = db(statement);
-    return result.front().id;
+    const auto &row = result.front();
+    Routes routes;
+    routes.setId(row.id);
+    routes.setDriverId(row.driverId);
+    routes.setVehicleId(row.vehiclesId);
+    routes.setCargoesId(row.cargoesId);
+    routes.setStartPoint(row.startPoint);
+    routes.setEndPoint(row.endPoint);
+    routes.setStatus(row.status);
+    routes.setCreatedAt(row.createdAt);
+    routes.setUpdatedAt(row.updatedAt);
+    return routes;
 }
 
 std::vector<Routes> RoutesDAO::getAllRoutes() {
     auto route = mydb::Routes::TabRoutes{};
     auto statement = select(
                 route.id, route.driverId, route.vehiclesId, route.cargoesId, route.startPoint, route.endPoint,
-                route.status, route.createdAt, route.updated_at
+                route.status, route.createdAt, route.updatedAt
             ).from(route)
             .where(route.id == 1);
 
@@ -63,7 +77,7 @@ std::vector<Routes> RoutesDAO::getAllRoutes() {
     std::vector<Routes> listRoutes;
     for (const auto &row: result) {
         auto createdAt = static_cast<std::chrono::system_clock::time_point>(row.createdAt);
-        auto updatedAt = static_cast<std::chrono::system_clock::time_point>(row.updated_at);
+        auto updatedAt = static_cast<std::chrono::system_clock::time_point>(row.updatedAt);
         listRoutes.emplace_back(
             row.id, row.driverId, row.vehiclesId, row.cargoesId, row.startPoint, row.endPoint,
             row.status, createdAt, updatedAt
@@ -73,18 +87,18 @@ std::vector<Routes> RoutesDAO::getAllRoutes() {
 }
 
 void RoutesDAO::updateRoutes(const Routes &routes) {
-    if (!isRoutesExist(routes.id)) {
+    if (!isRoutesExist(routes.getId())) {
         throw std::invalid_argument("Route doesn`t exist!");
     }
     auto route = mydb::Routes::TabRoutes{};
     auto statement = update(route).set(
-        route.driverId = routes.driverId,
-        route.vehiclesId = routes.vehicleId,
-        route.cargoesId = routes.cargoesId,
-        route.startPoint = routes.startPoint,
-        route.endPoint = routes.endPoint,
-        route.status = routes.status
-    ).where(route.id == routes.id);
+        route.driverId = routes.getDriverId(),
+        route.vehiclesId = routes.getVehicleId(),
+        route.cargoesId = routes.getCargoesId(),
+        route.startPoint = routes.getStartPoint(),
+        route.endPoint = routes.getEndPoint(),
+        route.status = routes.getStatus()
+    ).where(route.id == routes.getId());
     try {
         db(statement);
         std::cout << "Route successfully updated!" << std::endl;
