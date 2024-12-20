@@ -10,7 +10,8 @@ void JsonCargoesResponse::sendJsonErrorMessage(const int errorCode, const std::s
     Poco::JSON::Stringifier::stringify(responseObject, json);
 }
 
-void JsonCargoesResponse::sendJsonSuccessByCargoesIdMessage(const int errorCode,const Cargoes &cargo, std::ostream &json) {
+void JsonCargoesResponse::sendJsonSuccessByCargoesIdMessage(const int errorCode, const Cargoes &cargo,
+                                                            std::ostream &json) {
     Poco::JSON::Object responseObject;
     responseObject.set("status", "success");
     responseObject.set("error_code", errorCode);
@@ -34,7 +35,7 @@ void JsonCargoesResponse::sendJsonSuccessByCargoesIdMessage(const int errorCode,
 }
 
 void JsonCargoesResponse::sendJsonSuccessCargoesMessage(int errorCode, const std::string &message,
-    std::ostream &json) {
+                                                        std::ostream &json) {
     Poco::JSON::Object responseObject;
     responseObject.set("error_code", errorCode);
     responseObject.set("status", "success");

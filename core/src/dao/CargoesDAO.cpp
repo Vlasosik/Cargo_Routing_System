@@ -47,7 +47,7 @@ Cargoes CargoesDAO::getCargoesById(const int64_t id) {
     auto statement = select(cargo.id, cargo.name, cargo.weight, cargo.sender, cargo.receipt, cargo.createdAt,
                             cargo.updatedAt).from(cargo).where(cargo.id == id);
     auto result = db(statement);
-    const auto& row = result.front();
+    const auto &row = result.front();
     Cargoes cargoes;
     cargoes.setId(row.id);
     cargoes.setName(row.name);

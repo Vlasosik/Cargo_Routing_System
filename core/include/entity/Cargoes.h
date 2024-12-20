@@ -141,7 +141,7 @@ namespace mydb::Cargoes {
 
 struct Cargoes {
 private:
-    int64_t id {};
+    int64_t id{};
     std::string name;
     double weight;
     std::string sender;
@@ -151,7 +151,7 @@ private:
 
 public:
     Cargoes()
-        : weight(0.0),createdAt(std::chrono::system_clock::now()), updatedAt(std::chrono::system_clock::now()) {
+        : weight(0.0), createdAt(std::chrono::system_clock::now()), updatedAt(std::chrono::system_clock::now()) {
     }
 
     Cargoes(int64_t id, std::string name, double weight, std::string sender, std::string receipt,
