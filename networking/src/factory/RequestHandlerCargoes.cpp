@@ -11,16 +11,16 @@
 #include "http_server/HttpServer.h"
 #include "response/JsonCargoesResponse.h"
 
-RequestHandlerCargoes::RequestHandlerCargoes() : cargoesService(ServiceContainer::getInstance().getCargoesService()) {
-}
-
 using Poco::Net::HTTPRequest;
 using Poco::Net::HTTPResponse;
+
+RequestHandlerCargoes::RequestHandlerCargoes() : cargoesService(ServiceContainer::getInstance().getCargoesService()) {
+}
 
 void RequestHandlerCargoes::handleRequest(Poco::Net::HTTPServerRequest &request,
                                           Poco::Net::HTTPServerResponse &response) {
     const Poco::URI uri(request.getURI());
-    Poco::URI::QueryParameters queryParameters = uri.getQueryParameters();
+    auto queryParameters = uri.getQueryParameters();
     response.setContentType("application/json");
 
     std::unordered_map<std::string, std::function<void()> > methodHandlers = {
@@ -72,10 +72,10 @@ void RequestHandlerCargoes::handleCreateCargo(Poco::Net::HTTPServerRequest &requ
         JsonCargoesResponse::sendJsonSuccessCargoesMessage(HTTPResponse::HTTP_CREATED,
                                                            "Cargo created successfully", responseStream);
     } catch (const std::exception &ex) {
-        response.setStatus(HTTPResponse::HTTP_INTERNAL_SERVER_ERROR);
+        response.setStatus(HTTPResponse::HTTP_BAD_REQUEST);
         auto &json = response.send();
-        JsonCargoesResponse::sendJsonErrorMessage(HTTPResponse::HTTP_INTERNAL_SERVER_ERROR,
-                                                  "Internal server error", json);
+        JsonCargoesResponse::sendJsonErrorMessage(HTTPResponse::HTTP_BAD_REQUEST,
+                                                  ex.what(), json);
     }
 }
 
