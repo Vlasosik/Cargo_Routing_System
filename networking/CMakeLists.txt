@@ -11,6 +11,14 @@ add_library(networking STATIC
         src/factory/RequestHandlerRoutes.cpp
         include/response/JsonRoutesResponse.h
         src/response/JsonRoutesResponse.cpp
+        include/factory/RequestHandlerDrivers.h
+        src/factory/RequestHandlerDrivers.cpp
+        include/response/JsonDriversResponse.h
+        src/response/JsonDriversResponse.cpp
+        include/factory/RequestHandlerVehicles.h
+        src/factory/RequestHandlerVehicles.cpp
+        include/response/JsonVehiclesResponse.h
+        src/response/JsonVehiclesResponse.cpp
 )
 
 include_directories(/opt/homebrew/opt/libpq/include)
