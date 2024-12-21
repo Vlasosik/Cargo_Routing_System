@@ -4,6 +4,8 @@
 #include <Poco/URI.h>
 
 #include "factory/RequestHandlerCargoes.h"
+#include "factory/RequestHandlerDrivers.h"
+#include "factory/RequestHandlerVehicles.h"
 
 RequestHandlerFactory::RequestHandlerFactory() {
     // Create cargo request handler
@@ -17,6 +19,18 @@ RequestHandlerFactory::RequestHandlerFactory() {
     registerHandler("/route/create", []() { return new RequestHandlerRoutes; });
     registerHandler("/route/update", []() { return new RequestHandlerRoutes; });
     registerHandler("/route/delete", []() { return new RequestHandlerRoutes; });
+
+    // Create driver request handler
+    registerHandler("/driver", []() { return new RequestHandlerDrivers; });
+    registerHandler("/driver/create", []() { return new RequestHandlerDrivers; });
+    registerHandler("/driver/update", []() { return new RequestHandlerDrivers; });
+    registerHandler("/driver/delete", []() { return new RequestHandlerDrivers; });
+
+    // Create vehicle request handler
+    registerHandler("/vehicle", []() { return new RequestHandlerVehicles; });
+    registerHandler("/vehicle/create", []() { return new RequestHandlerVehicles; });
+    registerHandler("/vehicle/update", []() { return new RequestHandlerVehicles; });
+    registerHandler("/vehicle/delete", []() { return new RequestHandlerVehicles; });
 }
 
 Poco::Net::HTTPRequestHandler *RequestHandlerFactory::
