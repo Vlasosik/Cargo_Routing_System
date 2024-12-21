@@ -1,10 +1,7 @@
 #include "http_server/HttpServer.h"
-#include <Poco/Net/HTTPServerRequest.h>
 #include <Poco/Net/HTTPServerResponse.h>
 #include <Poco/Logger.h>
-#include <Poco/ConsoleChannel.h>
 #include <Poco/JSON/Object.h>
-#include <Poco/JSON/Stringifier.h>
 
 #include "factory/RequestHandlerFactory.h"
 
