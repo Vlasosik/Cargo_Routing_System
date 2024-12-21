@@ -10,7 +10,7 @@
 
      void createDriver(const Drivers &drivers) const;
 
-     [[nodiscard]] int64_t getDriverById(int64_t id) const;
+     [[nodiscard]] Drivers getDriverById(int64_t id) const;
 
      [[nodiscard]] std::vector<Drivers> getAllDrivers() const;
 
