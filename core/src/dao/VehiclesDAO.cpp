@@ -26,8 +26,8 @@ VehiclesDAO::VehiclesDAO() {
 void VehiclesDAO::createVehicles(const Vehicles &vehicles) {
     auto vehicle = mydb::Vehicles::TabVehicle{};
     auto statement = insert_into(vehicle).set(
-        vehicle.brand = vehicles.brand,
-        vehicle.type = vehicles.type
+        vehicle.brand = vehicles.getBrand(),
+        vehicle.type = vehicles.getType()
     );
     try {
         db(statement);
@@ -37,20 +37,28 @@ void VehiclesDAO::createVehicles(const Vehicles &vehicles) {
     }
 }
 
-int64_t VehiclesDAO::getVehicleById(const int64_t &id) {
+Vehicles VehiclesDAO::getVehicleById(const int64_t &id) {
     if (!isVehicleExist(id)) {
         throw std::invalid_argument("Vehicle doesn`t exist!");
     }
     auto vehicle = mydb::Vehicles::TabVehicle{};
-    auto statement = select(vehicle.id).from(vehicle).where(vehicle.id == id);
+    auto statement = select(vehicle.id, vehicle.brand, vehicle.type, vehicle.createdAt, vehicle.updatedAt)
+            .from(vehicle).where(vehicle.id == id);
     auto result = db(statement);
-    return result.front().id;
+    auto &row = result.front();
+    Vehicles vehicles;
+    vehicles.setId(row.id);
+    vehicles.setBrand(row.brand);
+    vehicles.setType(row.type);
+    vehicles.setCreatedAt(row.createdAt);
+    vehicles.setUpdatedAt(row.updatedAt);
+    return vehicles;
 }
 
 std::vector<Vehicles> VehiclesDAO::getAllVehicle() {
     auto vehicle = mydb::Vehicles::TabVehicle{};
     auto statement = select(
-                vehicle.id, vehicle.brand, vehicle.type, vehicle.createdAt, vehicle.updated_at
+                vehicle.id, vehicle.brand, vehicle.type, vehicle.createdAt, vehicle.updatedAt
             ).from(vehicle)
             .where(vehicle.id == 1);
 
@@ -61,7 +69,7 @@ std::vector<Vehicles> VehiclesDAO::getAllVehicle() {
     std::vector<Vehicles> listVehicles;
     for (const auto &row: result) {
         auto createdAt = static_cast<std::chrono::system_clock::time_point>(row.createdAt);
-        auto updatedAt = static_cast<std::chrono::system_clock::time_point>(row.updated_at);
+        auto updatedAt = static_cast<std::chrono::system_clock::time_point>(row.updatedAt);
         listVehicles.emplace_back(
             row.id, row.brand, row.type, createdAt, updatedAt
         );
@@ -70,14 +78,14 @@ std::vector<Vehicles> VehiclesDAO::getAllVehicle() {
 }
 
 void VehiclesDAO::updateVehicle(const Vehicles &vehicles) {
-    if (!isVehicleExist(vehicles.id)) {
+    if (!isVehicleExist(vehicles.getId())) {
         throw std::invalid_argument("Vehicle doesn`t exist!");
     }
     auto vehicle = mydb::Vehicles::TabVehicle{};
     auto statement = update(vehicle).set(
-        vehicle.brand = vehicles.brand,
-        vehicle.type = vehicles.type
-    ).where(vehicle.id == vehicles.id);
+        vehicle.brand = vehicles.getBrand(),
+        vehicle.type = vehicles.getType()
+    ).where(vehicle.id == vehicles.getId());
     try {
         db(statement);
         std::cout << "Vehicle successfully updated!" << std::endl;
