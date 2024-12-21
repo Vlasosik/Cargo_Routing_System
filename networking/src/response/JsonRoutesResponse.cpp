@@ -12,19 +12,19 @@ void JsonRoutesResponse::sendJsonSuccessByRouteIdMessage(int errorCode, const Ro
     Poco::JSON::Object responseObject;
     responseObject.set("status", "success");
     responseObject.set("error_code", errorCode);
-    responseObject.set("message", "Cargo found");
+    responseObject.set("message", "Route found");
 
     Poco::JSON::Object routeObject;
     routeObject.set("id", route.getId());
-    routeObject.set("driverId", route.getDriverId());
-    routeObject.set("vehiclesId", route.getVehicleId());
-    routeObject.set("cargoesId", route.getCargoesId());
-    routeObject.set("startPoint", route.getStartPoint());
-    routeObject.set("endPoint", route.getEndPoint());
+    routeObject.set("driver_id", route.getDriverId());
+    routeObject.set("vehicles_id", route.getVehicleId());
+    routeObject.set("cargoes_id", route.getCargoesId());
+    routeObject.set("start_point", route.getStartPoint());
+    routeObject.set("end_point", route.getEndPoint());
     std::string formattedCreatedAt = Routes::formatTimeToString(route.getCreatedAt());
     std::string formattedUpdatedAt = Routes::formatTimeToString(route.getUpdatedAt());
-    routeObject.set("createdAt", formattedCreatedAt);
-    routeObject.set("updatedAt", formattedUpdatedAt);
+    routeObject.set("created_at", formattedCreatedAt);
+    routeObject.set("updated_at", formattedUpdatedAt);
 
     responseObject.set("Route Info", routeObject);
     std::stringstream jsonStream;

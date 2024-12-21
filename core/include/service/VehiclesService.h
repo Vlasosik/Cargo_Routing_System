@@ -9,7 +9,7 @@
 
      void createVehicle(const Vehicles &vehicles) const;
 
-     [[nodiscard]] int64_t getVehicleById(int64_t id) const;
+     [[nodiscard]] Vehicles getVehicleById(int64_t id) const;
 
      [[nodiscard]] std::vector<Vehicles> getAllVehicles() const;
 

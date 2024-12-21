@@ -4,13 +4,10 @@
  }
 
  void VehiclesService::createVehicle(const Vehicles &vehicles) const {
-     if (vehicles.id <= 0) {
-         throw std::invalid_argument("Id must be greater than zero.");
-     }
      vehiclesDao.createVehicles(vehicles);
  }
 
- int64_t VehiclesService::getVehicleById(const int64_t id) const {
+ Vehicles VehiclesService::getVehicleById(const int64_t id) const {
      return vehiclesDao.getVehicleById(id);
  }
 
@@ -19,7 +16,6 @@
  }
 
  void VehiclesService::updateVehicle(const Vehicles &vehicles) const {
-//     VehicleValidate::validateForUpdate(vehicles);
      vehiclesDao.updateVehicle(vehicles);
  }
 

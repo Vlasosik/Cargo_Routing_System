@@ -11,7 +11,7 @@ public:
 
     void createVehicles(const Vehicles &vehicles);
 
-    int64_t getVehicleById(const int64_t &id);
+    Vehicles getVehicleById(const int64_t &id);
 
     std::vector<Vehicles> getAllVehicle();
 

@@ -4,16 +4,13 @@
  }
 
  void DriversService::createDriver(const Drivers &drivers) const {
-     if (drivers.getId() <= 0) {
-         throw std::invalid_argument("Id must be greater than zero.");
-     }
      if (isDriverPhoneExist(drivers.getPhone())) {
          throw std::invalid_argument("Phone number already exists!");
      }
      driverDao.createDriver(drivers);
  }
 
- int64_t DriversService::getDriverById(const int64_t id) const {
+ Drivers DriversService::getDriverById(const int64_t id) const {
      return driverDao.getDriverById(id);
  }
 

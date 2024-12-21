@@ -26,9 +26,9 @@ DriverDAO::DriverDAO() {
 void DriverDAO::createDriver(const Drivers &driver) {
     auto drivers = mydb::Drivers::TabDrivers{};
     const auto statement = insert_into(drivers).set(
-        drivers.firstName = driver.firstName,
-        drivers.lastName = driver.lastName,
-        drivers.phone = driver.phone
+        drivers.firstName = driver.getFirstName(),
+        drivers.lastName = driver.getLastName(),
+        drivers.phone = driver.getPhone()
     );
     try {
         db(statement);
@@ -38,31 +38,40 @@ void DriverDAO::createDriver(const Drivers &driver) {
     }
 }
 
-int64_t DriverDAO::getDriverById(const int64_t &id) {
+Drivers DriverDAO::getDriverById(const int64_t &id) {
     if (!isDriverExist(id)) {
         throw std::invalid_argument("Driver doesn`t exist!");
     }
     auto drivers = mydb::Drivers::TabDrivers{};
-    auto statement = sqlpp::select(drivers.id).from(drivers).where(drivers.id == id);
+    auto statement = sqlpp::select(drivers.id, drivers.firstName, drivers.lastName, drivers.phone, drivers.createdAt,
+                                   drivers.updatedAt).from(drivers).where(drivers.id == id);
     auto result = db(statement);
-    return result.front().id;
+    const auto &row = result.front();
+    Drivers driver;
+    driver.setId(row.id);
+    driver.setFirstName(row.firstName);
+    driver.setLastName(row.lastName);
+    driver.setPhone(row.phone);
+    driver.setCreatedAt(row.createdAt);
+    driver.setUpdatedAt(row.updatedAt);
+    return driver;
 }
 
 std::vector<Drivers> DriverDAO::getAllDrivers() {
     auto drivers = mydb::Drivers::TabDrivers{};
     auto statement = sqlpp::select(
-        drivers.id, drivers.firstName, drivers.lastName, drivers.phone, drivers.createdAt, drivers.updated_at
-    ).from(drivers)
-    .where(drivers.id == 1);
+                drivers.id, drivers.firstName, drivers.lastName, drivers.phone, drivers.createdAt, drivers.updatedAt
+            ).from(drivers)
+            .where(drivers.id == 1);
 
     auto result = db(statement);
     if (result.empty()) {
         throw std::invalid_argument("Drivers don`t exist!");
     }
     std::vector<Drivers> listDrivers;
-    for (const auto& row : result) {
+    for (const auto &row: result) {
         auto createdAt = static_cast<std::chrono::system_clock::time_point>(row.createdAt);
-        auto updatedAt = static_cast<std::chrono::system_clock::time_point>(row.updated_at);
+        auto updatedAt = static_cast<std::chrono::system_clock::time_point>(row.updatedAt);
         listDrivers.emplace_back(
             row.id, row.firstName, row.lastName, row.phone, createdAt, updatedAt
         );
@@ -70,21 +79,18 @@ std::vector<Drivers> DriverDAO::getAllDrivers() {
     return listDrivers;
 }
 
-void DriverDAO::updateDriver(const Drivers& driver) {
-    if (!isDriverExist(driver.id)) {
+void DriverDAO::updateDriver(const Drivers &driver) {
+    if (!isDriverExist(driver.getId())) {
         throw std::invalid_argument("Driver doesn`t exist!");
-    }
-    if (isPhoneExist(driver.phone)) {
-        throw std::invalid_argument("Driver phone already exist!");
     }
     auto drivers = mydb::Drivers::TabDrivers{};
     auto statement = update(drivers).set(
-        drivers.firstName = driver.firstName,
-        drivers.lastName = driver.lastName,
-        drivers.phone = driver.phone,
-        drivers.createdAt = driver.createdAt,
-        drivers.updated_at = driver.updatedAt
-    ).where(drivers.id == driver.id);
+        drivers.firstName = driver.getFirstName(),
+        drivers.lastName = driver.getLastName(),
+        drivers.phone = driver.getPhone(),
+        drivers.createdAt = driver.getCreatedAt(),
+        drivers.updatedAt = driver.getUpdatedAt()
+    ).where(drivers.id == driver.getId());
     try {
         db(statement);
         std::cout << "Driver successfully updated!" << std::endl;

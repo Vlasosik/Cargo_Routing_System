@@ -18,7 +18,7 @@ RequestHandlerRoutes::RequestHandlerRoutes() : routesService(ServiceContainer::g
 void RequestHandlerRoutes::
 handleRequest(Poco::Net::HTTPServerRequest &request, Poco::Net::HTTPServerResponse &response) {
     const Poco::URI uri(request.getURI());
-    Poco::URI::QueryParameters queryParameters = uri.getQueryParameters();
+    auto queryParameters = uri.getQueryParameters();
     response.setContentType("application/json");
 
     std::unordered_map<std::string, std::function<void()> > methodHandlers = {
@@ -139,10 +139,10 @@ void RequestHandlerRoutes::handleUpdateRoute(Poco::Net::HTTPServerRequest &reque
         JsonRoutesResponse::sendJsonSuccessRouteMessage(HTTPResponse::HTTP_CREATED, "Route updated successfully",
                                                         responseStream);
     } catch (const std::exception &ex) {
-        response.setStatus(HTTPResponse::HTTP_INTERNAL_SERVER_ERROR);
+        response.setStatus(HTTPResponse::HTTP_BAD_REQUEST);
         auto &json = response.send();
-        JsonRoutesResponse::sendJsonErrorMessage(HTTPResponse::HTTP_INTERNAL_SERVER_ERROR,
-                                                 "Internal server error", json);
+        JsonRoutesResponse::sendJsonErrorMessage(HTTPResponse::HTTP_BAD_REQUEST,
+                                                 ex.what(), json);
     }
 }
 

@@ -21,8 +21,8 @@ namespace mydb::Drivers {
                 const T &operator()() const { return id; }
             };
         };
-        using _traits = sqlpp::make_traits<sqlpp::bigint>;
 
+        using _traits = sqlpp::make_traits<sqlpp::bigint>;
     };
 
     struct FirstName {
@@ -96,9 +96,9 @@ namespace mydb::Drivers {
 
             template<typename T>
             struct _member_t {
-                T updated_at;
-                T &operator()() { return updated_at; }
-                const T &operator()() const { return updated_at; }
+                T updatedAt;
+                T &operator()() { return updatedAt; }
+                const T &operator()() const { return updatedAt; }
             };
         };
 
@@ -121,20 +121,32 @@ namespace mydb::Drivers {
 }
 
 struct Drivers {
+private:
     int64_t id = 0;
     std::string firstName;
     std::string lastName;
     std::string phone;
     sqlpp::chrono::microsecond_point createdAt;
     sqlpp::chrono::microsecond_point updatedAt;
+public:
+    Drivers() : createdAt(std::chrono::system_clock::now()), updatedAt(std::chrono::system_clock::now()) {
+    }
 
-    Drivers() = default;
-
-    explicit Drivers(int64_t id, std::string firstName, std::string lastName, std::string phone,
-                     sqlpp::chrono::microsecond_point createdAt,
-                     sqlpp::chrono::microsecond_point updatedAt)
+    Drivers(int64_t id, std::string firstName, std::string lastName, std::string phone,
+            sqlpp::chrono::microsecond_point createdAt,
+            sqlpp::chrono::microsecond_point updatedAt)
         : id(id), firstName(std::move(firstName)), lastName(std::move(lastName)), phone(std::move(phone)),
           createdAt(createdAt), updatedAt(updatedAt) {
+    }
+
+    Drivers(int64_t id, std::string firstName, std::string lastName, std::string phone)
+        : id(id), firstName(std::move(firstName)), lastName(std::move(lastName)), phone(std::move(phone)),
+          createdAt(std::chrono::system_clock::now()), updatedAt(std::chrono::system_clock::now()) {
+    }
+
+    Drivers(std::string firstName, std::string lastName, std::string phone)
+        : firstName(std::move(firstName)), lastName(std::move(lastName)), phone(std::move(phone)),
+          createdAt(std::chrono::system_clock::now()), updatedAt(std::chrono::system_clock::now()) {
     }
 
     [[nodiscard]] int64_t getId() const { return id; }
@@ -150,5 +162,13 @@ struct Drivers {
     void setPhone(std::string phone) { this->phone = std::move(phone); }
     void setCreatedAt(const sqlpp::chrono::microsecond_point createdAt) { this->createdAt = createdAt; }
     void setUpdatedAt(const sqlpp::chrono::microsecond_point updatedAt) { this->updatedAt = updatedAt; }
+
+    static std::string formatTimeToString(const sqlpp::chrono::microsecond_point &timePoint) {
+        using namespace std::chrono;
+        auto time = system_clock::to_time_t(timePoint);
+        std::ostringstream oss;
+        oss << std::put_time(std::localtime(&time), "%Y-%m-%d %H:%M:%S");
+        return oss.str();
+    }
 };
 #endif //DRIVERS_H
