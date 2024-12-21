@@ -1,7 +1,6 @@
 #ifndef CARGOES_H
 #define CARGOES_H
 #include <string>
-#include <utility>
 #include <sqlpp11/char_sequence.h>
 #include <sqlpp11/type_traits.h>
 #include <sqlpp11/chrono.h>
