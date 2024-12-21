@@ -82,9 +82,9 @@ namespace mydb::Vehicles {
 
             template<typename T>
             struct _member_t {
-                T updated_at;
-                T &operator()() { return updated_at; }
-                const T &operator()() const { return updated_at; }
+                T updatedAt;
+                T &operator()() { return updatedAt; }
+                const T &operator()() const { return updatedAt; }
             };
         };
 
@@ -107,18 +107,31 @@ namespace mydb::Vehicles {
 }
 
 struct Vehicles {
+private:
     int64_t id = 0;
     std::string brand;
     std::string type;
     sqlpp::chrono::microsecond_point createdAt;
     sqlpp::chrono::microsecond_point updatedAt;
 
-    Vehicles() = default;
+public:
+    Vehicles() : createdAt(std::chrono::system_clock::now()), updatedAt(std::chrono::system_clock::now()) {
+    }
 
-    explicit Vehicles(const int64_t id, std::string brand, std::string type,
-                      const sqlpp::chrono::microsecond_point createdAt,
-                      const sqlpp::chrono::microsecond_point updatedAt)
+    Vehicles(const int64_t id, std::string brand, std::string type,
+             const sqlpp::chrono::microsecond_point createdAt,
+             const sqlpp::chrono::microsecond_point updatedAt)
         : id(id), brand(std::move(brand)), type(std::move(type)), createdAt(createdAt), updatedAt(updatedAt) {
+    }
+
+    Vehicles(const int64_t id, std::string brand, std::string type)
+        : id(id), brand(std::move(brand)), type(std::move(type)), createdAt(std::chrono::system_clock::now()),
+          updatedAt(std::chrono::system_clock::now()) {
+    }
+
+    Vehicles(std::string brand, std::string type)
+        : brand(std::move(brand)), type(std::move(type)), createdAt(std::chrono::system_clock::now()),
+          updatedAt(std::chrono::system_clock::now()) {
     }
 
     [[nodiscard]] int64_t getId() const { return id; }
@@ -132,5 +145,13 @@ struct Vehicles {
     void setType(std::string type) { this->type = std::move(type); }
     void setCreatedAt(const sqlpp::chrono::microsecond_point createdAt) { this->createdAt = createdAt; }
     void setUpdatedAt(const sqlpp::chrono::microsecond_point updatedAt) { this->updatedAt = updatedAt; }
+
+    static std::string formatTimeToString(const sqlpp::chrono::microsecond_point &timePoint) {
+        using namespace std::chrono;
+        auto time = system_clock::to_time_t(timePoint);
+        std::ostringstream oss;
+        oss << std::put_time(std::localtime(&time), "%Y-%m-%d %H:%M:%S");
+        return oss.str();
+    }
 };
 #endif //VEHICLES_H
