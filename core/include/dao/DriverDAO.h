@@ -12,7 +12,7 @@ public:
 
     void createDriver(const Drivers& driver);
 
-    int64_t getDriverById(const int64_t &id);
+    Drivers getDriverById(const int64_t &id);
 
     std::vector<Drivers> getAllDrivers();
 
